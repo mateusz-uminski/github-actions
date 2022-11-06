@@ -1,0 +1,24 @@
+name: terragrunt-lint-hclfmt
+
+on:
+  workflow_call:
+    inputs:
+      terragrunt_version:
+        required: true
+        type: string
+
+jobs:
+  lint:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - uses: eLco/setup-terragrunt@v1
+        with:
+          terragrunt_version: ${{ inputs.terragrunt_version }}
+
+      - name: check the format of terragrunt hcl files
+        run: terragrunt hclfmt hclfmt --terragrunt-check
