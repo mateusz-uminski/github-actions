@@ -4,5 +4,4 @@ This repository serves as a central location for storing and sharing workflows t
 
 Besides the README.md further documentation can be found in commits, code comments and nested README files.
 
-Feel free to explore and copy everything you want.
-Enjoy!
+Feel free to explore and copy everything you want. Enjoy!
