@@ -1,0 +1,25 @@
+name: vagrant-lint-validate
+
+on:
+  workflow_call:
+    inputs:
+      vagrant_version:
+        required: true
+        type: string
+
+jobs:
+  lint:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: install vagrant
+        run: |
+          wget -O vagrant https://releases.hashicorp.com/vagrant/${{ inputs.vagrant_version }}/vagrant_${{ inputs.vagrant_version }}_x86_64.deb
+          sudo apt install vagrant
+
+      - name: check the format of vagrant files
+        run: vagrant validate -p
