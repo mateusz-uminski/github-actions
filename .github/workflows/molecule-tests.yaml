@@ -1,0 +1,72 @@
+name: molecule-tests
+
+on:
+  workflow_call:
+    inputs:
+      runner:
+        required: true
+        type: string
+      python_version:
+        required: true
+        type: string
+      ansible_version:
+        required: true
+        type: string
+      molecule_version:
+        required: true
+        type: string
+      molecule_plugins_version:
+        required: true
+        type: string
+      pytest_version:
+        required: true
+        type: string
+      pytest_testinfra_version:
+        required: true
+        type: string
+      role_path:
+        required: true
+        type: string
+      dockerfile_source:
+        required: true
+        type: string
+      docker_image_name:
+        required: true
+        type: string
+
+jobs:
+  tests:
+    runs-on: ${{ inputs.runner }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "${{ inputs.python_version }}"
+
+      - name: install ansible and molecule
+        run: |
+          pip3 install \
+            ansible==${{ inputs.ansible_version }} \
+            molecule==${{ inputs.molecule_version }} \
+            molecule-plugins[docker]==${{ inputs.molecule_plugins_version }} \
+            pytest==${{ inputs.pytest_version }} \
+            pytest-testinfra==${{ inputs.pytest_testinfra_version }}
+
+      - name: build the docker image
+        uses: docker/build-push-action@v5
+        with:
+          push: false
+          context: ${{ inputs.dockerfile_source }}
+          tags: ${{ inputs.docker_image_name }}
+        env:
+          DOCKER_BUILDKIT: 0
+
+      - name: run molecule tests
+        run: cd ${{ inputs.role_path }} && molecule test --all
+        env:
+          MOLECULE_PLATFORM_IMAGE: "${{ inputs.docker_image_name }}"
+          ANSIBLE_FORCE_COLOR: "1"
+          PY_COLORS: "1"
