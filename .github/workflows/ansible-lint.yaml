@@ -1,0 +1,16 @@
+name: ansible-lint
+
+on:
+  workflow_call:
+
+jobs:
+  lint:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: ansible/ansible-lint@v24.2.0
+        with:
+          args: "-p --force-color"
