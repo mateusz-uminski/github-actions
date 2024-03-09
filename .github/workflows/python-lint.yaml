@@ -1,0 +1,29 @@
+name: python-lint
+
+on:
+  workflow_call:
+    inputs:
+      python_version:
+        required: true
+        type: string
+      flake8_version:
+        required: true
+        type: string
+
+jobs:
+  flake8:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "${{ inputs.python_version }}"
+
+      - name: install flake8
+        run: pip3 install flake8==${{ inputs.flake8_version }}
+
+      - name: run flake8
+        run: flake8 .
