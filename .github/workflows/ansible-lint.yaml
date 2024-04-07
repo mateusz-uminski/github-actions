@@ -11,6 +11,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: ansible/ansible-lint@v24.2.0
+      - uses: ansible/ansible-lint@v24.2.1
         with:
           args: "-p --force-color"
