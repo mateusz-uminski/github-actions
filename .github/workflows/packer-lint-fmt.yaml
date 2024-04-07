@@ -1,0 +1,24 @@
+name: packer-lint-fmt
+
+on:
+  workflow_call:
+    inputs:
+      packer_version:
+        required: true
+        type: string
+
+jobs:
+  lint:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: hashicorp/setup-packer@v3
+        with:
+          version: ${{ inputs.packer_version }}
+
+      - name: check the format of packer files
+        run: packer fmt -check -recursive .
