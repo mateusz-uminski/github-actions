@@ -24,7 +24,7 @@ on:
       pytest_testinfra_version:
         required: true
         type: string
-      role_path:
+      path:
         required: true
         type: string
       dockerfile_source:
@@ -65,7 +65,7 @@ jobs:
           DOCKER_BUILDKIT: 0
 
       - name: run molecule tests
-        run: cd ${{ inputs.role_path }} && molecule test --all
+        run: cd ${{ inputs.path }} && molecule test --all
         env:
           MOLECULE_PLATFORM_IMAGE: "${{ inputs.docker_image_name }}"
           ANSIBLE_FORCE_COLOR: "1"
