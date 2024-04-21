@@ -1,0 +1,32 @@
+name: python-tests
+
+on:
+  workflow_call:
+    inputs:
+      python_version:
+        required: true
+        type: string
+      requirements_file:
+        required: true
+        type: string
+      tests_dir:
+        required: true
+        type: string
+
+jobs:
+  pytest:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "${{ inputs.python_version }}"
+
+      - name: install packages
+        run: pip3 install -r ${{ inputs.requirements_file }}
+
+      - name: run pytest
+        run: pytest ${{ inputs.tests_dir }}
