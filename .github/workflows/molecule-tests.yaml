@@ -27,7 +27,10 @@ on:
       path:
         required: true
         type: string
-      dockerfile_source:
+      docker_context:
+        required: true
+        type: string
+      dockerfile_path:
         required: true
         type: string
       docker_image_name:
@@ -59,10 +62,9 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: false
-          context: ${{ inputs.dockerfile_source }}
+          context: ${{ inputs.docker_context }}
+          file: ${{ inputs.dockerfile_path }}
           tags: ${{ inputs.docker_image_name }}
-        env:
-          DOCKER_BUILDKIT: 0
 
       - name: run molecule tests
         run: cd ${{ inputs.path }} && molecule test --all
