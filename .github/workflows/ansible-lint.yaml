@@ -2,6 +2,10 @@ name: ansible-lint
 
 on:
   workflow_call:
+    inputs:
+      requirements_file:
+        default: ""
+        type: string
 
 jobs:
   lint:
@@ -14,3 +18,4 @@ jobs:
       - uses: ansible/ansible-lint@v24.9.2
         with:
           args: "-p --force-color"
+          requirements_file: "${{ inputs.requirements_file }}"
