@@ -1,0 +1,28 @@
+name: go-lint
+
+on:
+  workflow_call:
+    inputs:
+      go_version:
+        required: true
+        type: string
+      golangci_version:
+        required: true
+        type: string
+
+jobs:
+  golangci:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-go@v5.1.0
+        with:
+          go-version: "${{ inputs.go_version }}"
+
+      - name: run golangci-lint
+        uses: golangci/golangci-lint-action@v6.1.1
+        with:
+          version: "${{ inputs.golangci_version }}"
