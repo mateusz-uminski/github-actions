@@ -28,4 +28,4 @@ jobs:
         with:
           push: false
           context: "${{ inputs.path }}/"
-          tags: "${{ inputs.path }}:${{ inputs.tag }}"
+          tags: "${{ inputs.path != '.' && inputs.path || 'app' }}:${{ inputs.tag }}"
