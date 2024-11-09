@@ -1,0 +1,28 @@
+name: go-tests
+
+on:
+  workflow_call:
+    inputs:
+      go_version:
+        required: true
+        type: string
+
+jobs:
+  tests:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-go@v5.1.0
+        with:
+          go-version: "${{ inputs.go_version }}"
+
+      - name: run tests
+        run: |
+          go test -v -race \
+            -covermode atomic \
+            -coverprofile coverage.out \
+            ./... -json > report.json
+          go tool cover -func coverage.out
