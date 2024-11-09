@@ -7,7 +7,7 @@ on:
         required: true
         type: string
       requirements_file:
-        required: true
+        required: false
         type: string
       tests_dir:
         required: true
@@ -26,7 +26,17 @@ jobs:
           python-version: "${{ inputs.python_version }}"
 
       - name: install packages
-        run: pip3 install -r ${{ inputs.requirements_file }}
+        run: |
+          if [[ -n "${{ inputs.requirements_file }}" ]]; then
+            pip install -r "${{ inputs.requirements_file }}"
+          else
+            pip install poetry && poetry install --no-root
+          fi
 
       - name: run pytest
-        run: pytest ${{ inputs.tests_dir }}
+        run: |
+          if [[ -n "${{ inputs.requirements_file }}" ]]; then
+            pytest ${{ inputs.tests_dir }}
+          else
+            poetry run pytest ${{ inputs.tests_dir }}
+          fi
