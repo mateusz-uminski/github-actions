@@ -15,7 +15,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: ansible/ansible-lint@v24.9.2
+      - uses: ansible/ansible-lint@v24.10.0
         with:
           args: "-p --force-color"
           requirements_file: "${{ inputs.requirements_file }}"
